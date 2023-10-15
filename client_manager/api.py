@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from base import BASE_DATA as bd
-from s3_handler import arvan_uploader
+from utils.s3_handler import arvan_uploader
 from utils.adress_generator import get_s3_addresses
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
+print(bd)
+print(bd["ATLAS_PASSWORD"])
 db_pass = bd["ATLAS_PASSWORD"]
 uri = f"mongodb+srv://amirfazel45:{db_pass}@ccass1.x4qzd4s.mongodb.net/?retryWrites=true&w=majority"
 
