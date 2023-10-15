@@ -47,15 +47,17 @@ def register_request():
         print(i, " : " ,user_info[i])
     acceptance = input("are you sure?\n1)yes\n2)No\n>")
     if acceptance == '1':
-        endpoint_url= bd["ARVAN_CLOUD_ENDPOINT"]
-        secret_key = bd["SECRET_KEY"]
-        access_key = bd["ACCESS_KEY"]
-        bucket_name = bd["BUCKET_NAME"]
-        file_addresses = list(map(file_address_generator, [user_info["image1_name"], user_info["image2_name"]]))
+        # endpoint_url= bd["ARVAN_CLOUD_ENDPOINT"]
+        # secret_key = bd["SECRET_KEY"]
+        # access_key = bd["ACCESS_KEY"]
+        # bucket_name = bd["BUCKET_NAME"]
+        # file_addresses = list(map(file_address_generator, [user_info["image1_name"], user_info["image2_name"]]))
         
-        # print(file_addresses)
-        for file in file_addresses:
-            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file[0], file[1])
+        # # print(file_addresses)
+        # for file in file_addresses:
+        #     arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file[0], file[1])
+    
+     pass
     else:
         print("You rejected the application. redirecting to main page...")
 
