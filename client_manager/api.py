@@ -35,7 +35,6 @@ def register_request():
     db_data =  {
          "email": user_info["email"],
          "last_name": user_info["last_name"],
-         "email": user_info["email"],
          "national_code": user_info["national_code"],
          "ip_address": user_info["ip_address"],
          "image1_key": img1_key,
