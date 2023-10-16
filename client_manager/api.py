@@ -60,8 +60,26 @@ def register_request():
 
 @app.route('/api/check/<national_code>', methods=['GET'])
 def check_request(national_code):
-    res = {'message': 'successfully changed the request situation'}
-    return jsonify(res), 200
+    hashed_national_code = str(hashlib.sha256(national_code.encode()).hexdigest())
+    db_collection = db.brobankDB
+    query = {"national_code": hashed_national_code}
+
+    
+    try:
+        if db_collection.count_documents(query) == 1:
+            query_res = db_collection.find_one(query)
+            print(query_res)
+            res = {"state": query_res["status"]}
+            return jsonify(res), 200
+        else:
+            res = {'message': 'No account found with this National code'}
+            return jsonify(res), 404
+    except Exception as e:
+        print('error: ',e)
+        res = {"message": "something went wrong. try again in a second..."}
+        return jsonify(res), 400
+
+
 
 
 if __name__ == '__main__':

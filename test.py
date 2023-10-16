@@ -7,7 +7,6 @@ uri = "mongodb+srv://amirfazel45:CCAss1_DBaas@ccass1.x4qzd4s.mongodb.net/?retryW
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client.ccass1
-result = db.test.insert_one({"mg": "HIIII"})
 print(result)
 
 # Send a ping to confirm a successful connection
