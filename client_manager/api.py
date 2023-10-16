@@ -68,7 +68,6 @@ def check_request(national_code):
     try:
         if db_collection.count_documents(query) == 1:
             query_res = db_collection.find_one(query)
-            print(query_res)
             res = {"state": query_res["status"]}
             return jsonify(res), 200
         else:
