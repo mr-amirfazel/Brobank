@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 
 logging.basicConfig(level=logging.INFO)
 # Configure logging
-def arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file_address, image_key):
+def arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, image_file, image_key):
     
     try:
         s3_resource = boto3.resource(
@@ -19,10 +19,10 @@ def arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file_addre
     else:
         try:
             bucket = s3_resource.Bucket(bucket_name)
-            file_path = file_address
+            # file_path = file_address
             object_name = image_key
 
-            with open(file_path, "rb") as file:
+            with image_file as file:
                 bucket.put_object(
                     ACL='private',
                     Body=file,
