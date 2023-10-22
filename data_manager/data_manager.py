@@ -28,8 +28,8 @@ def get_urls():
 
 
 # TODO get images from s3
-def arvan_cloud_downloader():
-   
+def dowload_images():
+   pass
 
 
 
@@ -43,3 +43,7 @@ def arvan_cloud_downloader():
 # TODO send email
 
 get_urls()
+
+
+if __name__ == '__main__':
+    pass
