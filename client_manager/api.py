@@ -26,14 +26,16 @@ CORS(app)
 @app.route('/api/register', methods=['POST'])
 def register_request():
     user_info = request.get_json()
-    file_addresses = get_s3_addresses(user_info)
-
-    img1_key = file_addresses[0][1]
-    img2_key = file_addresses[1][1]
+    # file_addresses = get_s3_addresses(user_info)
+    images = request.files.values()
     nat_code = user_info["national_code"]
 
-    for file in file_addresses:
-            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file[0], file[1])
+    img1_key = f"{nat_code}_img1"
+    img2_key = f"{nat_code}_img2"
+    
+
+    for index, file in enumerate(images):
+            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}")
     
     db_data =  {
          "email": user_info["email"],
@@ -76,7 +78,16 @@ def check_request(national_code):
         res = {"message": "something went wrong. try again in a second..."}
         return jsonify(res), 400
 
-
+@app.route('/api/test', methods=['POST'])
+def test():
+    files = request.files
+    print(request.files.values())
+    for index, item in enumerate(request.files.values()):
+        print(index+1, item)
+        # print(item.filename)
+        # print(item.content)
+        # print(item.contentType)
+    return  jsonify({"msg": "Awli"}), 200
 
 
 if __name__ == '__main__':
