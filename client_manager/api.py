@@ -26,7 +26,6 @@ CORS(app)
 @app.route('/api/register', methods=['POST'])
 def register_request():
     user_info = request.get_json()
-    # file_addresses = get_s3_addresses(user_info)
     images = request.files.values()
     nat_code = user_info["national_code"]
 
@@ -78,16 +77,7 @@ def check_request(national_code):
         res = {"message": "something went wrong. try again in a second..."}
         return jsonify(res), 400
 
-@app.route('/api/test', methods=['POST'])
-def test():
-    files = request.files
-    print(request.files.values())
-    for index, item in enumerate(request.files.values()):
-        print(index+1, item)
-        # print(item.filename)
-        # print(item.content)
-        # print(item.contentType)
-    return  jsonify({"msg": "Awli"}), 200
+
 
 
 if __name__ == '__main__':

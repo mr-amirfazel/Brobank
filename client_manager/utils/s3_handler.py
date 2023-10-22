@@ -19,7 +19,6 @@ def arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, image_file
     else:
         try:
             bucket = s3_resource.Bucket(bucket_name)
-            # file_path = file_address
             object_name = image_key
 
             with image_file as file:
