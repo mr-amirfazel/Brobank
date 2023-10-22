@@ -26,14 +26,15 @@ CORS(app)
 @app.route('/api/register', methods=['POST'])
 def register_request():
     user_info = request.get_json()
-    file_addresses = get_s3_addresses(user_info)
-
-    img1_key = file_addresses[0][1]
-    img2_key = file_addresses[1][1]
+    images = request.files.values()
     nat_code = user_info["national_code"]
 
-    for file in file_addresses:
-            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file[0], file[1])
+    img1_key = f"{nat_code}_img1"
+    img2_key = f"{nat_code}_img2"
+    
+
+    for index, file in enumerate(images):
+            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}")
     
     db_data =  {
          "email": user_info["email"],
