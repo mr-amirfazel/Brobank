@@ -8,8 +8,6 @@ from pymongo.server_api import ServerApi
 import hashlib
 from utils.status import STATUS
 
-with open('./assets/img1.png', "rb") as file:
-               print("works")
 db_pass = bd["ATLAS_PASSWORD"]
 uri = f"mongodb+srv://amirfazel45:{db_pass}@ccass1.x4qzd4s.mongodb.net/?retryWrites=true&w=majority"
 
