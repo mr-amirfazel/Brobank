@@ -1,5 +1,5 @@
 import requests
-from base import BASE_DATA as bd
+from utils.base import BASE_DATA as bd
 
 api_key = bd["IMAGGA_API_KEY"]
 api_secret = bd["IMAGGA_API_SECRET"]

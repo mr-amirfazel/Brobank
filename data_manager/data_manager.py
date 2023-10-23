@@ -1,7 +1,8 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from utils import s3_handler, imagga_handler
+from utils import s3_handler, imagga_handler, mail_gun_handler
 from utils.base import BASE_DATA as bd
+from utils.status import STATUS
 import hashlib
 db_pass = bd["ATLAS_PASSWORD"]
 uri = f"mongodb+srv://amirfazel45:{db_pass}@ccass1.x4qzd4s.mongodb.net/?retryWrites=true&w=majority"
@@ -11,9 +12,8 @@ db = client.ccass1
 
 user_data = {}
 
+# TODO get the national ID from RABBITMQ
 
-
-# TODO get image urls from DB
 def get_urls(data):
     hashed_national_code = str(hashlib.sha256(data.encode()).hexdigest())
     db_collection = db.brobankDB
@@ -41,10 +41,9 @@ def dowload_images(keys, data):
 
 
 
-# TODO check for face recognition
 def check_for_face_detection(data):
-    image1_path = f'./{data}_img_1'
-    image2_path = f'./{data}_img_2'
+    image1_path = f'./{data}_img_0.png'
+    image2_path = f'./{data}_img_1.png'
 
     img1_id = imagga_handler.image_has_face(image1_path)
     img2_id = imagga_handler.image_has_face(image2_path)
@@ -53,11 +52,9 @@ def check_for_face_detection(data):
 
 
 
-#TODO check for face similarity
 def get_similarity(first_id, second_id):
     return imagga_handler.image_similarity(first_id, second_id)
 
-#TODO change status in DB
 def change_status(data, status):
 
     db_collection = db.brobankDB
@@ -72,7 +69,13 @@ def change_status(data, status):
     else:
         return False
 
-# TODO send email
+def send_email():
+    email = user_data["email"]
+    last_name = user_data["last_name"]
+    subject = "BROBANK Registeration request"
+    text = f"dear {last_name}, your registeration at brobank was approved, you are now ready to apply for next steps..."
+
+    mail_gun_handler.mailgun_send(last_name, email, subject, text)
 
 
 
@@ -86,5 +89,10 @@ if __name__ == '__main__':
         is_similar = get_similarity(faceID1, faceID2)
 
         if is_similar:
-            pass
+            change_status(data, STATUS.APPROVED)
+            send_email()
+        else:
+            change_status(data, STATUS.REJECTED)
+    else:
+        change_status(data, STATUS.REJECTED)
 
