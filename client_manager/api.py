@@ -29,12 +29,12 @@ def register_request():
     images = request.files.values()
     nat_code = user_info["national_code"]
 
-    img1_key = f"{nat_code}_img1"
-    img2_key = f"{nat_code}_img2"
+    img1_key = f"{nat_code}_img1.png"
+    img2_key = f"{nat_code}_img2.png"
     
 
     for index, file in enumerate(images):
-            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}")
+            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}.png")
     
     db_data =  {
          "email": user_info["email"],
