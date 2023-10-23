@@ -58,6 +58,19 @@ def get_similarity(first_id, second_id):
     return imagga_handler.image_similarity(first_id, second_id)
 
 #TODO change status in DB
+def change_status(data, status):
+
+    db_collection = db.brobankDB
+
+    filter_query = {"national_id": data}
+    operation = {"$set": {"status": status}}
+
+    response = db_collection.update_one(filter_query, operation)
+
+    if response.modified_count == 1:
+        return True
+    else:
+        return False
 
 # TODO send email
 
