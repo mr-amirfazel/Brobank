@@ -36,14 +36,14 @@ def dowload_images(keys, data):
 
 
    for index, key in enumerate(keys):
-       s3_handler.s3_downloader(endpoint_url, access_key, secret_key, bucket_name, key, f'./{data}_img_{index}')
+       s3_handler.s3_downloader(endpoint_url, access_key, secret_key, bucket_name, key, f'./{data}_img_{index+1}.png')
        
 
 
 
 def check_for_face_detection(data):
-    image1_path = f'./{data}_img_0.png'
-    image2_path = f'./{data}_img_1.png'
+    image1_path = f'./{data}_img_1.png'
+    image2_path = f'./{data}_img_2.png'
 
     img1_id = imagga_handler.image_has_face(image1_path)
     img2_id = imagga_handler.image_has_face(image2_path)
@@ -86,13 +86,17 @@ if __name__ == '__main__':
     dowload_images(keys, data) 
     faceID1, faceID2 = check_for_face_detection(data)
     if faceID1 is not None and faceID2 is not None:
+        print('theres face')
         is_similar = get_similarity(faceID1, faceID2)
 
         if is_similar:
-            change_status(data, STATUS.APPROVED)
-            send_email()
+            print('accept')
+            # change_status(data, STATUS.APPROVED)
+            # send_email()
         else:
-            change_status(data, STATUS.REJECTED)
+            print('reject')
+            # change_status(data, STATUS.REJECTED)
     else:
-        change_status(data, STATUS.REJECTED)
+        print('no face')
+        # change_status(data, STATUS.REJECTED)
 
