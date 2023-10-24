@@ -1,6 +1,4 @@
-from enum import Enum
-
-class STATUS(Enum):
+class STATUS():
     PENDING = "Pending"
     APPROVED = "Approved"
     REJECTED = "Rejected"

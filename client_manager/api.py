@@ -1,6 +1,8 @@
 import json
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
+import pika
+import pymongo
 from utils.base import BASE_DATA as bd
 from utils.s3_handler import arvan_uploader
 from utils.adress_generator import get_s3_addresses
@@ -28,7 +30,9 @@ CORS(app)
 @app.route('/api/register', methods=['POST'])
 def register_request():
     user_info = json.loads(request.form['json_data'])
+    print(user_info)
     images = request.files.values()
+    print(images)
     nat_code = user_info["national_code"]
 
 
@@ -56,6 +60,12 @@ def register_request():
         res = {"message": "registration done successfully"}
         publish_data(nat_code, bd["RABBITMQ_URL"])
         return jsonify(res), 200
+    except pymongo.errors.ConnectionFailure as e:
+        res = {"message": "Database faced some issues, request wasnt saved"}
+        return jsonify(res), 401
+    except pika.exceptions.AMQPConnectionError as e:
+        res = {"message": "your reqest is saved successfully but, Broker faced some issues"}
+        return jsonify(res), 401
     except Exception as e:
         print(e)
         res = {"message": "registration failed try again in a second..."}

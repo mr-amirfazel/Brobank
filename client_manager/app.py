@@ -1,11 +1,17 @@
+import json
+import os
+import requests
 from utils.input_handler import get_user_info
 from utils.s3_handler import *
-from base import BASE_DATA as bd
+from utils.base import BASE_DATA as bd
 from utils.status import STATUS
+from dotenv import load_dotenv
 
-BASE_URL = "http://localhost:500/api"
+load_dotenv()
+
+
 user_info = {}
-
+BASE_URL = os.getenv('API_BASE_URL')
 
 def welcome():
     print("HI!! welcome to brobank")
@@ -48,22 +54,49 @@ def register_request():
         print(i, " : " ,user_info[i])
     acceptance = input("are you sure?\n1)yes\n2)No\n>")
     if acceptance == '1':
-        # endpoint_url= bd["ARVAN_CLOUD_ENDPOINT"]
-        # secret_key = bd["SECRET_KEY"]
-        # access_key = bd["ACCESS_KEY"]
-        # bucket_name = bd["BUCKET_NAME"]
-        # file_addresses = list(map(file_address_generator, [user_info["image1_name"], user_info["image2_name"]]))
+        print('Wait! this might take a moment...')
+        img1 = user_info["image1_name"]
+        img2 = user_info["image2_name"]
+
+        img1_file = open(f'assets/{img1}', 'rb')
+        img2_file = open(f'assets/{img2}', 'rb')
+
+        response = requests.post(
+            BASE_URL+'/api/register',
+            data={'json_data': json.dumps(user_info)},
+            files={
+                'img1': ('img1.png', img1_file, 'image/png'),
+                'img2': ('img2.png', img2_file, 'image/png') 
+                }
+        )
+
+        if response.status_code == 200:
+            print('congrats ',response.json()["message"])
+        elif response.status_code == 401:
+            print('sorry ', response.json()["message"])
+        else:
+            print('Something went wrong please try again')
         
-        # # print(file_addresses)
-        # for file in file_addresses:
-        #     arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file[0], file[1])
     
-     pass
     else:
         print("You rejected the application. redirecting to main page...")
 
 def check_request():
-    pass
+    national_id = input('please enter your national ID that you registered with...\n>')
+
+    response = requests.get(
+        BASE_URL+ f'/api/check/{national_id}'
+    )
+
+    if response.status_code == 200:
+        state = response.json()["state"]
+        print(f'Your registeration status is at {state}')
+    else:
+        message = response.json()["message"]
+        if response.status_code == 404:
+            print(message)
+        elif response.status_code == 400:
+            print('we occured an error system responded with:\n', message)
 
 def user_loop():
     loop_condition = True

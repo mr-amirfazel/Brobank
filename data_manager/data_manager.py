@@ -15,7 +15,7 @@ user_data = {}
 # TODO get the national ID from RABBITMQ
 def get_national_code():
     try:
-        national_code = rabbit_consume.consume_data(bd["RABBITMQ_URL"])
+        national_code = rabbit_consume.consume_data(main_loop)
         return national_code
     except Exception as e:
         print(e)
@@ -86,17 +86,14 @@ def send_email():
     mail_gun_handler.mailgun_send(last_name, email, subject, text)
 
 
-
-
-if __name__ == '__main__':
-    data =  "9931001"
+def main_loop(data):
     keys = get_urls(data)
     dowload_images(keys, data) 
-    faceID1, faceID2 = check_for_face_detection(data)
-    print(faceID1, faceID2)
-    if faceID1 is not None and faceID2 is not None:
+    faceID, second_face_ID = check_for_face_detection(data)
+    print(faceID, second_face_ID)
+    if faceID is not None and second_face_ID is not None:
         print('theres face')
-        is_similar = get_similarity(faceID1, faceID2)
+        is_similar = get_similarity(faceID, second_face_ID)
 
         if is_similar:
             print('accept')
@@ -108,4 +105,28 @@ if __name__ == '__main__':
     else:
         print('no face')
         change_status(data, STATUS.REJECTED)
+
+
+if __name__ == '__main__':
+    # data =  "9931001"
+    data = get_national_code()
+    print('data is', data)
+    # keys = get_urls(data)
+    # dowload_images(keys, data) 
+    # faceID1, faceID2 = check_for_face_detection(data)
+    # print(faceID1, faceID2)
+    # if faceID1 is not None and faceID2 is not None:
+    #     print('theres face')
+    #     is_similar = get_similarity(faceID1, faceID2)
+
+    #     if is_similar:
+    #         print('accept')
+    #         change_status(data,STATUS.APPROVED)
+    #         # send_email()
+    #     else:
+    #         print('reject')
+    #         change_status(data, STATUS.REJECTED)
+    # else:
+    #     print('no face')
+    #     change_status(data, STATUS.REJECTED)
 

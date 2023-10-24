@@ -21,12 +21,12 @@ def arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, image_file
             bucket = s3_resource.Bucket(bucket_name)
             object_name = image_key
 
-            with image_file as file:
-                bucket.put_object(
-                    ACL='private',
-                    Body=file,
-                    Key=object_name
-                )
+            # with image_file as file:
+            bucket.put_object(
+                ACL='private',
+                Body=image_file,
+                Key=object_name
+            )
 
 
         except ClientError as e:
