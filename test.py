@@ -1,17 +1,12 @@
+import json
+import requests
 
-# from pymongo.mongo_client import MongoClient
-# from pymongo.server_api import ServerApi
+pdf_file = open('./CC_HW1.pdf', 'rb')
+data = {"name": "fazel", "lastName": "koozegar"}
 
-# uri = "mongodb+srv://amirfazel45:CCAss1_DBaas@ccass1.x4qzd4s.mongodb.net/?retryWrites=true&w=majority"
+requests.post(
+    'http://192.168.1.33:5000/api/test',
+    data= {'json_payload': json.dumps(data)},
+    files={'pdf_file' : ('file.pdf', pdf_file, 'application/pdf'),}
+)
 
-# # Create a new client and connect to the server
-# client = MongoClient(uri, server_api=ServerApi('1'))
-# db = client.ccass1
-# print(result)
-
-# Send a ping to confirm a successful connection
-# try:
-#     client.admin.command('ping')
-#     print("Pinged your deployment. You successfully connected to MongoDB!")
-# except Exception as e:
-#     print(e)

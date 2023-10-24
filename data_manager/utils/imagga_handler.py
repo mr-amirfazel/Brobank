@@ -8,14 +8,18 @@ api_secret = bd["IMAGGA_API_SECRET"]
 
 
 def image_has_face(image_path):
+    print(image_path, "is being checked")
     response = requests.post(
         'https://api.imagga.com/v2/faces/detections',
         auth=(api_key, api_secret),
-        files={'image': open(image_path, 'rb')})
+        files={'image': open(image_path, 'rb')}, 
+        params={"return_face_id":1}
+        )
     response = response.json()
-
-    if response.status.type == "sucess":
-        return response.result.faces[0]["face_id"]
+    print(response)
+    if response["status"]["type"] == "success":
+        print('aqa')
+        return response["result"]["faces"][0]["face_id"]
     else:
         return None
     
@@ -25,5 +29,5 @@ def image_similarity(face_id, second_face_id):
     auth=(api_key, api_secret))
     response = response.json()
 
-    if response.status.type == "sucess":
-        return response.result.score > 80
+    if response["status"]["type"] == "success":
+        return response["result"]["score"] > 80

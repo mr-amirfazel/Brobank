@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from utils import s3_handler, imagga_handler, mail_gun_handler
+from utils import s3_handler, imagga_handler, mail_gun_handler, rabbit_consume
 from utils.base import BASE_DATA as bd
 from utils.status import STATUS
 import hashlib
@@ -13,6 +13,12 @@ db = client.ccass1
 user_data = {}
 
 # TODO get the national ID from RABBITMQ
+def get_national_code():
+    try:
+        national_code = rabbit_consume.consume_data(bd["RABBITMQ_URL"])
+        return national_code
+    except Exception as e:
+        print(e)
 
 def get_urls(data):
     hashed_national_code = str(hashlib.sha256(data.encode()).hexdigest())
@@ -36,14 +42,14 @@ def dowload_images(keys, data):
 
 
    for index, key in enumerate(keys):
-       s3_handler.s3_downloader(endpoint_url, access_key, secret_key, bucket_name, key, f'./{data}_img_{index}')
+       s3_handler.s3_downloader(endpoint_url, access_key, secret_key, bucket_name, key, f'./{data}_img_{index+1}.png')
        
 
 
 
 def check_for_face_detection(data):
-    image1_path = f'./{data}_img_0.png'
-    image2_path = f'./{data}_img_1.png'
+    image1_path = f'./{data}_img_1.png'
+    image2_path = f'./{data}_img_2.png'
 
     img1_id = imagga_handler.image_has_face(image1_path)
     img2_id = imagga_handler.image_has_face(image2_path)
@@ -56,15 +62,17 @@ def get_similarity(first_id, second_id):
     return imagga_handler.image_similarity(first_id, second_id)
 
 def change_status(data, status):
+    hashed_national_code = str(hashlib.sha256(data.encode()).hexdigest())
 
     db_collection = db.brobankDB
 
-    filter_query = {"national_id": data}
+    filter_query = {"national_code": hashed_national_code}
     operation = {"$set": {"status": status}}
 
     response = db_collection.update_one(filter_query, operation)
 
     if response.modified_count == 1:
+        print("uh huh")
         return True
     else:
         return False
@@ -85,14 +93,19 @@ if __name__ == '__main__':
     keys = get_urls(data)
     dowload_images(keys, data) 
     faceID1, faceID2 = check_for_face_detection(data)
+    print(faceID1, faceID2)
     if faceID1 is not None and faceID2 is not None:
+        print('theres face')
         is_similar = get_similarity(faceID1, faceID2)
 
         if is_similar:
-            change_status(data, STATUS.APPROVED)
-            send_email()
+            print('accept')
+            change_status(data,STATUS.APPROVED)
+            # send_email()
         else:
+            print('reject')
             change_status(data, STATUS.REJECTED)
     else:
+        print('no face')
         change_status(data, STATUS.REJECTED)
 
