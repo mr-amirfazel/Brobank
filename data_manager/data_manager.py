@@ -12,7 +12,6 @@ db = client.ccass1
 
 user_data = {}
 
-# TODO get the national ID from RABBITMQ
 def get_national_code():
     try:
         national_code = rabbit_consume.consume_data(main_loop)
@@ -96,7 +95,7 @@ def main_loop(data):
 
         if is_similar:
             change_status(data,STATUS.APPROVED)
-            # send_email()
+            send_email()
         else:
             change_status(data, STATUS.REJECTED)
     else:

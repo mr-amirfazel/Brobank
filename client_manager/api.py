@@ -34,14 +34,9 @@ def register_request():
     images = request.files.values()
     print(images)
     nat_code = user_info["national_code"]
-
-
-    # request.post(json, data={})
-
     img1_key = f"{nat_code}_img1.png"
     img2_key = f"{nat_code}_img2.png"
     
-
     for index, file in enumerate(images):
             arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}.png")
     
@@ -93,15 +88,7 @@ def check_request(national_code):
         res = {"message": "something went wrong. try again in a second..."}
         return jsonify(res), 400
     
-@app.route('/api/test', methods=['POST'])
-def test():
-    json_data = json.loads(request.form['json_payload'])
-    file = request.files
 
-    print(json_data, file)
-
-    res = {"message": "Ah huh..."}
-    return jsonify(res), 200
 
 
 
