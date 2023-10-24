@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from utils import s3_handler, imagga_handler, mail_gun_handler
+from utils import s3_handler, imagga_handler, mail_gun_handler, rabbit_consume
 from utils.base import BASE_DATA as bd
 from utils.status import STATUS
 import hashlib
@@ -13,6 +13,12 @@ db = client.ccass1
 user_data = {}
 
 # TODO get the national ID from RABBITMQ
+def get_national_code():
+    try:
+        national_code = rabbit_consume.consume_data(bd["RABBITMQ_URL"])
+        return national_code
+    except Exception as e:
+        print(e)
 
 def get_urls(data):
     hashed_national_code = str(hashlib.sha256(data.encode()).hexdigest())
@@ -94,12 +100,12 @@ if __name__ == '__main__':
 
         if is_similar:
             print('accept')
-            change_status(data, "Approved")
+            change_status(data,STATUS.APPROVED)
             # send_email()
         else:
             print('reject')
-            change_status(data, "Rejected")
+            change_status(data, STATUS.REJECTED)
     else:
         print('no face')
-        change_status(data, "Rejected")
+        change_status(data, STATUS.REJECTED)
 

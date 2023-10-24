@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
-from base import BASE_DATA as bd
+from utils.base import BASE_DATA as bd
 from utils.s3_handler import arvan_uploader
 from utils.adress_generator import get_s3_addresses
+from utils.rabbit_publish import publish_data
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import hashlib
@@ -29,6 +30,9 @@ def register_request():
     images = request.files.values()
     nat_code = user_info["national_code"]
 
+
+    # request.post(json, data={})
+
     img1_key = f"{nat_code}_img1.png"
     img2_key = f"{nat_code}_img2.png"
     
@@ -49,6 +53,7 @@ def register_request():
     try:
         db.brobankDB.insert_one(db_data)
         res = {"message": "registration done successfully"}
+        publish_data(nat_code, bd["RABBITMQ_URL"])
         return jsonify(res), 200
     except Exception as e:
         print(e)
