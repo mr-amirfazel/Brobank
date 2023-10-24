@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from utils.base import BASE_DATA as bd
@@ -26,7 +27,7 @@ CORS(app)
 
 @app.route('/api/register', methods=['POST'])
 def register_request():
-    user_info = request.get_json()
+    user_info = json.loads(request.form['json_data'])
     images = request.files.values()
     nat_code = user_info["national_code"]
 
@@ -81,6 +82,16 @@ def check_request(national_code):
         print('error: ',e)
         res = {"message": "something went wrong. try again in a second..."}
         return jsonify(res), 400
+    
+@app.route('/api/test', methods=['POST'])
+def test():
+    json_data = json.loads(request.form['json_payload'])
+    file = request.files
+
+    print(json_data, file)
+
+    res = {"message": "Ah huh..."}
+    return jsonify(res), 200
 
 
 

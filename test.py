@@ -1,17 +1,12 @@
+import json
+import requests
 
-resthe = " )(((((())))))( "
+pdf_file = open('./CC_HW1.pdf', 'rb')
+data = {"name": "fazel", "lastName": "koozegar"}
 
-def match(reshte):
-    stack = []
-    counter = 0
-    for char in reshte:
-        if char == '(':
-            counter +=1
-        elif char == ')':
-            counter -=1
-
-    if counter == 0:
-        print('matches')
-    else:
-        print('doesnt match')
+requests.post(
+    'http://192.168.1.33:5000/api/test',
+    data= {'json_payload': json.dumps(data)},
+    files={'pdf_file' : ('file.pdf', pdf_file, 'application/pdf'),}
+)
 
