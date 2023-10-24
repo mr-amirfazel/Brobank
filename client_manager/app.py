@@ -1,6 +1,7 @@
 from utils.input_handler import get_user_info
 from utils.s3_handler import *
 from base import BASE_DATA as bd
+from utils.status import STATUS
 
 BASE_URL = "http://localhost:500/api"
 user_info = {}

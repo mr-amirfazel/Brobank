@@ -16,13 +16,14 @@ def image_has_face(image_path):
         params={"return_face_id":1}
         )
     response = response.json()
+    print(response)
     if response["status"]["type"] == "success":
+        print('aqa')
         return response["result"]["faces"][0]["face_id"]
     else:
         return None
     
 def image_similarity(face_id, second_face_id):
-    print('ids', face_id, second_face_id)
     response = requests.get(
     'https://api.imagga.com/v2/faces/similarity?face_id=%s&second_face_id=%s' % (face_id, second_face_id),
     auth=(api_key, api_secret))
