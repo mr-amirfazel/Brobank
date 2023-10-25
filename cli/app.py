@@ -2,7 +2,6 @@ import json
 import os
 import requests
 from utils.input_handler import get_user_info
-from utils.s3_handler import *
 from utils.base import BASE_DATA as bd
 from utils.status import STATUS
 from dotenv import load_dotenv
@@ -16,7 +15,7 @@ BASE_URL = os.getenv('API_BASE_URL')
 def welcome():
     print("HI!! welcome to brobank")
    # Open a text file for reading (replace 'filename.txt' with your file's path)
-    file_path = 'brobank.txt'
+    file_path = './brobank.txt'
     try:
         with open(file_path, 'r') as file:
             # Read the entire file content

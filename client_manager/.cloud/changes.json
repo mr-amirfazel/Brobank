@@ -1,0 +1,46 @@
+{
+    "new": [
+        {
+            "path2": "api.py"
+        },
+        {
+            "path2": "requirements.txt"
+        },
+        {
+            "path2": "utils"
+        },
+        {
+            "path2": "__pycache__"
+        },
+        {
+            "path2": "utils/adress_generator.py"
+        },
+        {
+            "path2": "utils/base.py"
+        },
+        {
+            "path2": "utils/rabbit_publish.py"
+        },
+        {
+            "path2": "utils/s3_handler.py"
+        },
+        {
+            "path2": "utils/status.py"
+        },
+        {
+            "path2": "utils/validator.py"
+        },
+        {
+            "path2": "utils/__init__.py"
+        },
+        {
+            "path2": "utils/__pycache__"
+        }
+    ],
+    "count_of_new": 12,
+    "modify": [],
+    "count_of_modify": 0,
+    "delete": [],
+    "count_of_delete": 0,
+    "log_identifier": "2qm71nk9g8yh796xppyb98z2hcjug4s32ovhm597yjg5jqu1fi"
+}
