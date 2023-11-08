@@ -6,6 +6,6 @@ BASE_DATA = {
     "ATLAS_PASSWORD": "CCAss1_DBaas",
     "IMAGGA_API_KEY": "acc_c1493563a636108",
     "IMAGGA_API_SECRET": "82e6ea554b92076f1c0a3f7f7edd1aa9",
-    "MAILGUN_API_KEY": "d00d912b945f6677ddc6dd18b4ab252e-324e0bb2-d1a39e9c",
+    "MAILGUN_API_KEY": "61835523e9c19e11262b9ebb9b15c79d-8c9e82ec-1678aac1",
     "RABBITMQ_URL": "amqps://seuumisc:rKJKzpOFICHQ8384CAhDDvLMrrMH_l3w@shark.rmq.cloudamqp.com/seuumisc:5672"
 }
