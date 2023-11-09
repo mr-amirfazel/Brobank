@@ -69,6 +69,8 @@ def register_request():
                 }
         )
 
+        
+
         if response.status_code == 200:
             print('congrats ',response.json()["message"])
         elif response.status_code == 401:

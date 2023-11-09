@@ -38,8 +38,8 @@ def register_request():
     img2_key = f"{nat_code}_img2.png"
     
     for index, file in enumerate(images):
-            arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}.png")
-    
+            res = arvan_uploader(endpoint_url, access_key, secret_key, bucket_name, file, f"{nat_code}_img{index+1}.png")
+            print('res: ', res)  
     db_data =  {
          "email": user_info["email"],
          "last_name": user_info["last_name"],
